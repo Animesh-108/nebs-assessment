@@ -1,0 +1,42 @@
+services:
+  # MongoDB Database
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - mern-network
+
+  # Express Backend
+  server:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/nebs-db
+      - PORT=5000
+    depends_on:
+      - mongo
+    networks:
+      - mern-network
+
+  # React Frontend (Optional for dev, usually run locally via vite)
+  client:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - server
+    networks:
+      - mern-network
+
+networks:
+  mern-network:
+    driver: bridge
+
+volumes:
+  mongo-data:

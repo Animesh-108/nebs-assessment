@@ -1,0 +1,28 @@
+--- Dependencies (Too heavy, installable via npm install) ---
+
+node_modules/
+*/node_modules/
+
+--- Environment Variables (Security Risk - NEVER Commit Secrets) ---
+
+.env
+.env.local
+backend/.env
+frontend/.env
+
+--- Build Outputs (Generated automatically) ---
+
+dist/
+build/
+coverage/
+
+--- System Files ---
+
+.DS_Store
+Thumbs.db
+
+--- Docker & Database ---
+
+We commit Dockerfiles, but NEVER the actual database data
+
+mongo-data/
