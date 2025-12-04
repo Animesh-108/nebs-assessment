@@ -142,7 +142,7 @@ const Header = ({ toggleSidebar }) => (
           src={profileImg} 
           alt="Profile" 
           className="w-8 h-8 md:w-9 md:h-9 rounded-full border border-white shadow-sm object-cover bg-gray-100"
-          onError={(e) => { e.target.src = "https://i.pravatar.cc/150?u=asif"; }}
+          onError={(e) => { e.target.src = "#"; }}
         />
       </div>
     </div>
