@@ -4,11 +4,9 @@ A fully responsive **Notice Board System** developed as a practical assessment f
 
 ## 🚀 Live Demonstration
 
-> **Note:** Please update these links after deployment.
-
 - **Frontend (Live UI):** https://nebs-assessment.vercel.app/
 - **Backend (API):** https://nebs-assessment-1.onrender.com
-
+> **Note:** To see the raw API data directly, you can visit: [https://nebs-assessment-1.onrender.com/api/notices](https://nebs-assessment-1.onrender.com/api/notices)
 ---
 
 ## ✨ Key Features
@@ -63,48 +61,28 @@ nebs-assessment/
 └── docker-compose.yml       # Orchestration for DB, Backend, Frontend
 ```
 ---
-## ⚙️ Installation & Setup
+## 🔐 Environment Variables
 
-### Option 1: Using Docker (Recommended)
+To run this project locally, you will need to add the following environment variables to your `.env` files.
 
-This method automatically sets up the Database, Backend, and Frontend in isolated containers.
+**1. Backend Configuration**
 
-1.  **Clone the repository:**
+Create a file named `.env` inside the `backend/` folder:
 
-    ```bash
-    git clone <your-repo-link>
-    cd nebs-assessment
-    ```
-
-2.  **Run the application:**
-
-    ```bash
-    docker-compose up --build
-    ```
-
-3.  **Access the App:**
-
-      - **Frontend:** `http://localhost:5173`
-      - **Backend API:** `http://localhost:5000`
-      - **Database:** Running internally on port `27017`
-
-### Option 2: Manual Setup
-
-If you do not have Docker installed, follow these steps to run the services individually:
-
-**1. Backend Setup**
-
-Navigate to the backend folder, install dependencies, and start the server.
-
-```bash
-cd backend
-npm install
-# Create a .env file with: MONGO_URI=mongodb://localhost:27017/nebs-db
-npm start
+```env
+PORT=5000
+MONGO_URI=mongodb://localhost:27017/nebs-db
+# Note: If using MongoDB Atlas, replace the URI with your connection string.
 ```
-I can certainly provide the Markdown text for the Installation & Setup section. You can copy the block below and paste it directly into your README.md or any other documentation file.
+**2. Frontend Configuration**
 
-Markdown
+Create a file named `.env` inside the `Fronntend/` folder:
+```
+VITE_API_URL=http://localhost:5000/api
+# Note: For production deployment, update this to your live backend URL (e.g., [https://nebs-assessment-1.onrender.com/api])
+```
+
+---
 
 ## ⚙️ Installation & Setup
 
@@ -142,7 +120,6 @@ Navigate to the backend folder, install dependencies, and start the server.
 ```bash
 cd backend
 npm install
-# Create a .env file with: MONGO_URI=mongodb://localhost:27017/nebs-db
 npm start
 ```
 **2. Frontend Setup**
