@@ -14,10 +14,12 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/nebs-db', {
 }).then(() => console.log('MongoDB Connected'))
   .catch(err => console.error(err));
 
-// --- ROUTES ---
-
+// Root Route
 app.get('/', (req, res) => {
-  res.send('API is running successfully. Go to /api/notices to see data.');
+  res.send(`
+    <h1>API is running successfully</h1>
+    <p>View raw data here: <a href="/api/notices">/api/notices</a></p>
+  `);
 });
 
 // 1. Create a Notice
