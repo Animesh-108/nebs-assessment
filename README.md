@@ -6,8 +6,8 @@ A fully responsive **Notice Board System** developed as a practical assessment f
 
 > **Note:** Please update these links after deployment.
 
-- **Frontend (Live UI):** 
-- **Backend (API):** 
+- **Frontend (Live UI):** https://nebs-assessment.vercel.app/
+- **Backend (API):** https://nebs-assessment-1.onrender.com
 
 ---
 
