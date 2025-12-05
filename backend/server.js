@@ -16,6 +16,10 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/nebs-db', {
 
 // --- ROUTES ---
 
+app.get('/', (req, res) => {
+  res.send('API is running successfully. Go to /api/notices to see data.');
+});
+
 // 1. Create a Notice
 app.post('/api/notices', async (req, res) => {
   try {
@@ -51,6 +55,30 @@ app.patch('/api/notices/:id/status', async (req, res) => {
     res.json(updatedNotice);
   } catch (err) {
     res.status(400).json({ error: err.message });
+  }
+});
+
+// 4. Update Entire Notice (Edit) - From previous step
+app.put('/api/notices/:id', async (req, res) => {
+  try {
+    const updatedNotice = await Notice.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    res.json(updatedNotice);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// 5. Delete a Notice - From previous step
+app.delete('/api/notices/:id', async (req, res) => {
+  try {
+    await Notice.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Notice deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
