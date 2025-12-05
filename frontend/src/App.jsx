@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   LayoutDashboard, Users, CreditCard, Receipt, UserCheck, FileText, 
   Briefcase, File, Bell, LogOut, User, Plus, Calendar, Eye, Edit, 
   MoreVertical, CheckCircle, X, ChevronDown, ChevronLeft, ChevronRight, 
-  Upload, Paperclip, Search, Menu
+  Upload, Paperclip, Search, Menu, Square, CheckSquare
 } from 'lucide-react';
 
 // --- ASSET CONFIGURATION ---
@@ -51,7 +51,6 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, toggleSidebar }) => {
         {/* Logo Section */}
         <div className="p-6 pb-8 flex items-center justify-between">
           <div className="flex items-center gap-2">
-             {/* Strict Logo Size: h-10 */}
              <img 
                src={logoImg} 
                alt="Nebs-IT" 
@@ -61,10 +60,8 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, toggleSidebar }) => {
                  e.target.nextSibling.style.display = 'block';
                }}
              />
-             {/* Fallback text if logo fails to load */}
              <span className="hidden text-2xl font-black text-gray-900 tracking-tight">Nebs-IT</span>
           </div>
-          {/* Close button for mobile */}
           <button onClick={toggleSidebar} className="md:hidden text-gray-500 hover:text-gray-800">
             <X size={24} />
           </button>
@@ -90,13 +87,11 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, toggleSidebar }) => {
                 </div>
                 {item.hasSubmenu && <ChevronDown size={14} className="text-gray-400" />}
                 
-                {/* Active Orange Indicator */}
                 {activeTab === item.id && (
                   <div className="absolute right-0 top-0 bottom-0 w-1 bg-[#F97316] rounded-l-full"></div>
                 )}
               </button>
               
-              {/* Submenu */}
               {item.id === 'employee' && (
                 <div className="pl-[52px] pr-4 space-y-2 py-2 bg-white">
                   <div className="text-[13px] font-semibold text-gray-800 cursor-pointer">Employee Database</div>
@@ -116,7 +111,6 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, toggleSidebar }) => {
 const Header = ({ toggleSidebar }) => (
   <header className="bg-white h-[72px] border-b border-gray-100 flex items-center justify-between px-4 md:px-8 flex-shrink-0 sticky top-0 z-20">
     <div className="flex items-center gap-3">
-      {/* Hamburger Menu for Mobile */}
       <button onClick={toggleSidebar} className="md:hidden text-gray-600 p-2 hover:bg-gray-50 rounded-lg">
         <Menu size={24} />
       </button>
@@ -148,6 +142,74 @@ const Header = ({ toggleSidebar }) => (
     </div>
   </header>
 );
+
+// --- CUSTOM NOTICE TYPE DROPDOWN ---
+const NoticeTypeDropdown = ({ value, onChange }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const options = [
+    'Warning / Disciplinary',
+    'Performance Improvement',
+    'Appreciation / Recognition',
+    'Attendance / Leave Issue',
+    'Payroll / Compensation',
+    'Contract / Role Update',
+    'Advisory / Personal Reminder'
+  ];
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSelect = (option) => {
+    onChange(option);
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <div 
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full h-10 px-3 border border-gray-200 rounded text-sm text-gray-600 flex items-center justify-between cursor-pointer bg-white"
+      >
+        <span className={value ? "text-gray-900" : "text-gray-500"}>
+          {value || "Select Notice Type"}
+        </span>
+        <ChevronDown size={16} className="text-gray-400" />
+      </div>
+
+      {isOpen && (
+        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-100 rounded-lg shadow-lg py-2 animate-fade-in-down max-h-[300px] overflow-y-auto">
+          {options.map((option) => (
+            <div 
+              key={option}
+              onClick={() => handleSelect(option)}
+              className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 cursor-pointer transition-colors"
+            >
+              <div className="text-gray-400">
+                {value === option ? (
+                  <CheckSquare size={18} className="text-blue-500" />
+                ) : (
+                  <Square size={18} />
+                )}
+              </div>
+              <span className={`text-sm ${value === option ? "text-blue-600 font-medium" : "text-gray-600"}`}>
+                {option}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const CreateNoticeForm = ({ onCancel, onSave }) => {
   const [formData, setFormData] = useState({
@@ -267,22 +329,11 @@ const CreateNoticeForm = ({ onCancel, onSave }) => {
                 <label className="block text-xs font-bold text-gray-700 mb-2">
                   <span className="text-red-500 mr-1">*</span>Notice Type
                 </label>
-                <div className="relative">
-                  <select 
-                    className="w-full h-10 px-3 border border-gray-200 rounded text-sm text-gray-500 focus:outline-none appearance-none bg-white"
-                    value={formData.noticeType}
-                    onChange={(e) => handleChange('noticeType', e.target.value)}
-                  >
-                    <option value="">Select Notice Type</option>
-                    <option value="Warning / Disciplinary">Warning / Disciplinary</option>
-                    <option value="Holiday & Event">Holiday & Event</option>
-                    <option value="General / Company-Wide">General / Company-Wide</option>
-                    <option value="Performance Improvement">Performance Improvement</option>
-                    <option value="HR & Policy Update">HR & Policy Update</option>
-                    <option value="Appreciation / Recognition">Appreciation / Recognition</option>
-                  </select>
-                  <ChevronDown className="absolute right-3 top-3 text-gray-400 pointer-events-none" size={16}/>
-                </div>
+                {/* Custom Dropdown used here */}
+                <NoticeTypeDropdown 
+                  value={formData.noticeType}
+                  onChange={(val) => handleChange('noticeType', val)}
+                />
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-2">
@@ -358,7 +409,6 @@ const CreateNoticeForm = ({ onCancel, onSave }) => {
 const NoticeList = ({ notices, onCreateClick, onToggleStatus }) => {
   return (
     <div className="space-y-6">
-      {/* Page Header - Responsive Stack */}
       <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
         <div>
           <h2 className="text-xl font-bold text-gray-800">Notice Management</h2>
@@ -381,7 +431,6 @@ const NoticeList = ({ notices, onCreateClick, onToggleStatus }) => {
         </div>
       </div>
 
-      {/* Filters - Responsive Flex */}
       <div className="flex flex-wrap items-center justify-end gap-3">
         <span className="text-sm font-bold text-gray-700 mr-1 hidden md:inline">Filter by:</span>
         
@@ -411,7 +460,6 @@ const NoticeList = ({ notices, onCreateClick, onToggleStatus }) => {
         <button className="text-blue-500 text-xs font-semibold px-2 hover:underline whitespace-nowrap">Reset Filters</button>
       </div>
 
-      {/* Table Container - Horizontal Scroll */}
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
         <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[900px]">
@@ -500,7 +548,6 @@ const NoticeList = ({ notices, onCreateClick, onToggleStatus }) => {
             </table>
         </div>
         
-        {/* Pagination */}
         <div className="flex justify-center items-center p-4 border-t border-gray-200 gap-2 bg-white overflow-x-auto">
             <button className="w-8 h-8 flex-shrink-0 flex items-center justify-center hover:bg-gray-100 rounded text-gray-400"><ChevronLeft size={16}/></button>
             <button className="w-8 h-8 flex-shrink-0 flex items-center justify-center bg-blue-50 border border-blue-100 text-blue-600 rounded text-xs font-bold">1</button>
@@ -515,7 +562,6 @@ const NoticeList = ({ notices, onCreateClick, onToggleStatus }) => {
   );
 };
 
-// --- SUCCESS MODAL ---
 const SuccessModal = ({ isOpen, onClose, onViewNotice, onCreateAnother }) => {
   if (!isOpen) return null;
 
@@ -560,7 +606,6 @@ const SuccessModal = ({ isOpen, onClose, onViewNotice, onCreateAnother }) => {
   );
 };
 
-// --- MAIN LAYOUT ---
 export default function App() {
   const [activeTab, setActiveTab] = useState('notice');
   const [view, setView] = useState('list');
@@ -568,7 +613,6 @@ export default function App() {
   const [notices, setNotices] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // FETCH DATA ON MOUNT
   useEffect(() => {
     fetch(`${API_BASE_URL}/notices`)
       .then(res => {
@@ -588,8 +632,17 @@ export default function App() {
   }, []);
 
   const handleCreateNotice = (formData) => {
-    if(!formData.title || !formData.publishDate) {
-        alert("Please fill in required fields (Title & Date).");
+    // --- VALIDATION FOR ALL REQUIRED FIELDS ---
+    if(
+       !formData.targetDepartment || 
+       !formData.title || 
+       !formData.employeeId ||
+       !formData.employeeName || 
+       !formData.position ||
+       !formData.noticeType ||
+       !formData.publishDate
+    ) {
+        alert("Please fill in all required fields (marked with *).");
         return;
     }
 
@@ -599,7 +652,7 @@ export default function App() {
         employeeId: formData.employeeId || "EMP-001",
         employeeName: formData.employeeName || "Asif Riaj",
         position: formData.position || "HR",
-        noticeType: formData.noticeType || "HR & Policy Update",
+        noticeType: formData.noticeType,
         publishDate: formData.publishDate,
         body: formData.body,
         status: "Published"
