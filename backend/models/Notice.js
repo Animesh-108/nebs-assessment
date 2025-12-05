@@ -10,17 +10,11 @@ const NoticeSchema = new mongoose.Schema({
     type: String, 
     required: true,
     enum: [
-      'General / Company-Wide',
       'Warning / Disciplinary',
       'Performance Improvement',
       'Appreciation / Recognition',
-      'Holiday & Event',
-      'HR & Policy Update',
-      'Finance & Payroll',
-      'IT / System Maintenance',
-      'Department / Team',
-      'Emergency / Urgent',
       'Attendance / Leave Issue',
+      'Payroll / Compensation',
       'Contract / Role Update',
       'Advisory / Personal Reminder'
     ] 
