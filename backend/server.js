@@ -18,7 +18,7 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/nebs-db', {
 app.get('/', (req, res) => {
   res.send(`
     <h1>API is running successfully</h1>
-    <p>View raw data here: <a href="/api/notices">/api/notices</a></p>
+    <p>View raw data here: <a href="/api/notices">api</a></p>
   `);
 });
 
